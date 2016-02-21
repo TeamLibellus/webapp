@@ -1,0 +1,33 @@
+<form name="classForm">
+<div layout-gt-xs="row">
+  <md-sidenav md-component-id="navbar" class="md-sidenav-left" md-is-locked-open="true">
+    <md-toolbar class="md-theme-indigo">
+      <h1 class="md-toolbar-tools">Menu</h1>
+    </md-toolbar>
+    <md-content layout-padding>
+      <p hide-md show-gt-md>
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Term</label>
+            <md-select ng-model="selectedTerm">
+              <md-option ng-repeat="term in terms" value="{{term.id}}" ng-if="term.name">
+                {{term.name}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Subject</label>
+            <md-select ng-model="selectedSubject">
+              <md-option ng-repeat="subject in subjects" value="{{subject.id}}" ng-if="subject.name">
+                {{subject.code}} - {{subject.name}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+      </p>
+    </md-content>
+  </md-sidenav>
+</div>
+</form>
