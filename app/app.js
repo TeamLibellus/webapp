@@ -15,7 +15,6 @@ libellus.config(['$routeProvider',
 .config(['$httpProvider', function($httpProvider) {
   $httpProvider.defaults.useXDomain = true;
   $httpProvider.defaults.headers['Content-Type'] = 'application/json';
-  $httpProvider.defaults.withCredentials = true;
 }])
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
