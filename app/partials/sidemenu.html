@@ -29,12 +29,37 @@
             </md-input-container>
           </div>
 
-          <div layout-gt-sm="row">
-            <md-input-container class="md-block" flex-gt-sm>
-              <md-checkbox ng-repeat="l in levels" value="{{l}}" ng-click="toggleSelection(l)">
+          <div layout="column">
+            <label>Levels</label>
+            <div layout>
+              <div layout="row" layout-wrap md-scroll-y>
+                <md-checkbox ng-repeat="l in levels" flex="33" layout="row" value="{{l}}" ng-click="toggleSelection(l)">
                   {{l}}
-              </md-checkbox>
-            </md-input-container>
+                </md-checkbox>
+              </div>
+            </div>
+          </div>
+
+          <div layout="column">
+            <label>Minimum seats</label>
+            <div layout>
+              <div flex="10" layout layout-align="center center">
+                <span class="md-body-1">{{minimumSeats}}</span>
+              </div>
+              <md-slider flex ng-model="minimumSeats" min="0" max="30">
+              </md-slider>
+            </div>
+          </div>
+
+          <div layout="column">
+            <label>Row height</label>
+            <div layout>
+              <div flex="10" layout layout-align="center center">
+                <span class="md-body-1">{{rowHeight}}</span>
+              </div>
+              <md-slider flex ng-model="rowHeight" min="10" max="60" step="10">
+              </md-slider>
+            </div>
           </div>
 
         </p>
