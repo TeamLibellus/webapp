@@ -1,0 +1,81 @@
+<form name="classForm">
+  <div layout-gt-xs="row">
+    <md-sidenav md-component-id="navbar" class="md-sidenav-left">
+      <md-toolbar class="md-theme-indigo">
+        <h1 class="md-toolbar-tools">Menu</h1>
+      </md-toolbar>
+      <md-content layout-padding>
+        <p hide-md show-gt-md>
+
+          <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Term</label>
+              <md-select ng-model="selectedTerm">
+                <md-option ng-repeat="term in terms" value="{{term.id}}" ng-if="term.name">
+                  {{term.name}}
+                </md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+
+          <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Subject</label>
+              <md-select ng-model="selectedSubject">
+                <md-option ng-repeat="subject in subjects" value="{{subject.id}}" ng-if="subject.name">
+                  {{subject.code}} - {{subject.name}}
+                </md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+
+          <div layout="column">
+            <label>Levels</label>
+            <div layout>
+              <div layout="row" layout-wrap md-scroll-y>
+                <md-checkbox ng-repeat="l in levels" flex="33" layout="row" value="{{l}}" ng-click="toggleSelection(l)">
+                  {{l}}
+                </md-checkbox>
+              </div>
+            </div>
+          </div>
+
+          <div layout="column">
+            <label>Minimum seats</label>
+            <div layout>
+              <div flex="10" layout layout-align="center center">
+                <span class="md-body-1">{{minimumSeats}}</span>
+              </div>
+              <md-slider flex ng-model="minimumSeats" min="0" max="30">
+              </md-slider>
+            </div>
+          </div>
+
+          <div layout="column">
+            <label>Row height</label>
+            <div layout>
+              <div flex="10" layout layout-align="center center">
+                <span class="md-body-1">{{rowHeight}}</span>
+              </div>
+              <md-slider flex ng-model="rowHeight" min="10" max="60" step="10">
+              </md-slider>
+            </div>
+          </div>
+
+          <div layout="row">
+            <p flex>Selected classes only</p>
+            <md-switch flex="20" ng-model="selectedClassesOnly">
+            </md-switch>
+          </div>
+
+          <div layout="row">
+            <p flex>Show classes in conflict</p>
+            <md-switch flex="20" ng-model="classConflicts">
+            </md-switch>
+          </div>
+
+        </p>
+      </md-content>
+    </md-sidenav>
+  </div>
+</form>

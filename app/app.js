@@ -1,4 +1,4 @@
-libellus = angular.module('libellus', ['ngRoute', 'ngMaterial', 'ngMessages']);
+libellus = angular.module('libellus', ['ngRoute', 'ngMaterial', 'ngMessages', 'ngAnimate', 'ngAria']);
 
 libellus.config(['$routeProvider',
   function($routeProvider) {

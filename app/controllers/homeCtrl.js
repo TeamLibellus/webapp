@@ -1,4 +1,4 @@
-libellus.controller('homeController', ['$scope', '$http', function($scope, $http) {
+libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', function($scope, $http, $mdSidenav, $log) {
 
   $scope.days = [{
     name: "Monday",
@@ -18,11 +18,39 @@ libellus.controller('homeController', ['$scope', '$http', function($scope, $http
   }];
 
   $scope.hours = ["8:00am", "9:00am", "10:00am", "11:00am", "12:00pm", "1:00pm", "2:00pm",
-    "3:00pm", "4:00pm", "5:00pm", "6:00pm", "7:00pm", "8:00pm", "9:00pm", "10:00pm"];
+  "3:00pm", "4:00pm", "5:00pm", "6:00pm", "7:00pm", "8:00pm", "9:00pm", "10:00pm"];
+  $scope.levels = [100, 200, 300, 400, 500, 600];
 
   $scope.terms = [];
   $scope.subjects = [];
   $scope.classes = [];
+  $scope.selectedLevels = [];
+  $scope.minimumSeats = 1;
+  $scope.rowHeight = 40;
+  $scope.selectedClassesOnly = false;
+  $scope.classConflicts = true;
+
+  $scope.selectedTerm;
+
+  $scope.toggleSelection = function toggleSelection(level) {
+    var i = $scope.selectedLevels.indexOf(level);
+    if (i > -1) {
+      $log.debug("Del");
+      $scope.selectedLevels.splice(i, 1);
+    }
+    else {
+      $log.debug("Add");
+      $scope.selectedLevels.push(level);
+    }
+    $log.debug($scope.selectedLevels);
+  };
+
+  $scope.openNavbar = function () {
+    $mdSidenav('navbar').open()
+    .then(function () {
+      $log.debug("open navbar is done");
+    });
+  }
 
   $scope.getTerms = function() {
     $http({
@@ -94,9 +122,14 @@ libellus.controller('homeController', ['$scope', '$http', function($scope, $http
   $scope.sortClasses = function () {
     $scope.classes.forEach(function(e, i, t){
       e.time.forEach(function(ee, ii, tt) {
+        //
         $scope.courses[ee.day][$scope.convertHours(ee.start)].push(e)
       });
     });
+  }
+
+  $scope.getDuration = function(start, end) {
+    var h = parseInt(end.plit(":")[0]) - parseInt(start.plit(":")[0])
   }
 
   $scope.convertHours = function(hoursFr) {
