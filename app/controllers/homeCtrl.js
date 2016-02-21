@@ -11,6 +11,8 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
   $scope.selectedLevels = [];
   $scope.minimumSeats = 1;
   $scope.rowHeight = 40;
+  $scope.selectedClassesOnly = false;
+  $scope.classConflicts = true;
 
   $scope.selectedTerm;
 
