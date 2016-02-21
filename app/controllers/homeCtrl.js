@@ -139,4 +139,24 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
     return hoursUS.toString();
   }
 
+ function c_to_rgb(c) {
+      var b = c % 256,
+          g_0 = (c % 65536 - b),
+          r_0 = c - g_0 - b,
+          g = g_0 / 256,
+          r = r_0 / 65536;
+
+      return [r, g, b];
+  }
+  $scope.generateColor = function (id) {
+    var tmp = parseInt((id * 0xFFFFFF) / 300).toString();
+    var rgb = c_to_rgb(tmp);
+    return "rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ")";
+  }
+
+  // 0xFFFFFF -> 700
+  // x -> id;
+
+// 700 -> 0xFFFFFF
+// id -> x
 }]);
