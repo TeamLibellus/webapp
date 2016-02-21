@@ -12,6 +12,8 @@ md-input-container .md-errors-spacer {
 
 .day-row {
   height: 60px;
+  max-height: 60px;
+  min-height: 60px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   position: relative;
 }
@@ -27,4 +29,5 @@ md-input-container .md-errors-spacer {
   border-radius: 5px;
   background-color: rgb(33,150,243);
   margin-right: 5px;
+  overflow: hidden;
 }

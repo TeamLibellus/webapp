@@ -93,10 +93,6 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
   $scope.getSubjects(1);
   $scope.getClasses(1);
 
-  $scope.timeToHeight = function () {
-
-  }
-
   $scope.timeToMargin = function () {
 
   }
@@ -122,14 +118,16 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
   $scope.sortClasses = function () {
     $scope.classes.forEach(function(e, i, t){
       e.time.forEach(function(ee, ii, tt) {
-        //
-        $scope.courses[ee.day][$scope.convertHours(ee.start)].push(e)
+        e.height = 60 * $scope.getDuration(ee.start, ee.end);
+        e.top = ee.start.split(":")[1];
+        $scope.courses[ee.day][$scope.convertHours(ee.start)].push(e);
       });
     });
   }
 
   $scope.getDuration = function(start, end) {
-    var h = parseInt(end.plit(":")[0]) - parseInt(start.plit(":")[0])
+    var d = new Date("October 13, 2014 "+end+":00") - new Date("October 13, 2014 "+start+":00");
+    return ((d / 1000) / 3600);
   }
 
   $scope.convertHours = function(hoursFr) {

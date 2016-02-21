@@ -14,7 +14,6 @@
           <md-icon class="material-icons">search</md-icon>
         </md-button>
         <md-button class="md-icon-button" aria-label="More" ng-click="openNavbar()">
-          <!-- <md-icon class="fa fa-angle-down" id="fa-3"></md-icon> -->
           <md-icon class="material-icons">settings_input_composite</md-icon>
         </md-button>
       </div>
@@ -24,7 +23,8 @@
         <h3 class=".md-headline">{{d.name}}</h3>
         <div ng-repeat="h in hours" class="day-row" layout="row">
           <p class="hours"><small>{{h}}</small></p>
-          <div flex ng-repeat="c in courses[d.abr][h.split(':')[0]]" class="courses-box md-primary" style="height:10px">{{c.code}}</div>
+
+          <div flex ng-repeat="c in courses[d.abr][h.split(':')[0]]" class="courses-box md-primary" style="height:{{c.height}}px;margin-top:{{c.top}}">{{c.code}}</div>
         </div>
       </div>
     </md-content>
