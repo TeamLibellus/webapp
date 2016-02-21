@@ -1,4 +1,4 @@
-libellus.controller('homeController', ['$scope', '$http', function($scope, $http) {
+libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', function($scope, $http, $mdSidenav, $log) {
 
   $scope.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
   $scope.hours = ["8:00am", "9:00am", "10:00am", "11:00am", "12:00pm", "1:00pm", "2:00pm",
@@ -7,6 +7,13 @@ libellus.controller('homeController', ['$scope', '$http', function($scope, $http
   $scope.terms = [];
   $scope.subjects = [];
   $scope.classes = [];
+
+$scope.openNavbar = function () {
+  $mdSidenav('navbar').open()
+  .then(function () {
+    $log.debug("open navbar is done");
+  });
+}
 
 $scope.getTerms = function() {
   $http({
