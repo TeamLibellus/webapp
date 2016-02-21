@@ -19,7 +19,6 @@ libellus.config(['$routeProvider',
 }])
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
-    .primaryPalette('orange')
-    .accentPalette('blue')
-    .warnPalette('red');
+    .primaryPalette('blue')
+    .accentPalette('red')
 });
