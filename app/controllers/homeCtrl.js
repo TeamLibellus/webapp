@@ -8,6 +8,8 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
   $scope.subjects = [];
   $scope.classes = [];
 
+  $scope.selectedTerm;
+
 $scope.openNavbar = function () {
   $mdSidenav('navbar').open()
   .then(function () {
@@ -51,8 +53,8 @@ $scope.getClasses = function(subjectId) {
   });
 }
 
-// $scope.getTerms();
-// $scope.getSubjects(1);
+$scope.getTerms();
+$scope.getSubjects(1);
 // $scope.getClasses(1);
 
 }]);
