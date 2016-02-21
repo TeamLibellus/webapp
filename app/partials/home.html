@@ -19,8 +19,11 @@
   </md-toolbar>
   <md-content layout="row" layout-fill>
     <div flex ng-repeat="d in days" class="day-column" layout="column">
-      <div ng-repeat="h in hours"></div>
+      <h3 class=".md-headline">{{d.name}}</h3>
+      <div ng-repeat="h in hours" class="day-row" layout="row">
+        <p class="hours"><small>{{h}}</small></p>
+        <div flex ng-repeat="c in courses[d.abr][h.split(':')[0]]" class="courses-box md-primary" style="height:10px">{{c.code}}</div>
+      </div>
     </div>
-
   </md-content>
 </div>
