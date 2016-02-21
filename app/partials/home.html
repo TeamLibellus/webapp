@@ -24,7 +24,8 @@
         <div ng-repeat="h in hours" class="day-row" layout="row">
           <p class="hours"><small>{{h}}</small></p>
 
-          <div flex ng-repeat="c in courses[d.abr][h.split(':')[0]]" class="courses-box md-primary" style="height:{{c.height}}px;margin-top:{{c.top}}">{{c.code}}</div>
+          <div flex ng-repeat="c in courses[d.abr][h.split(':')[0]]" class="courses-box md-primary"
+          style="background-color:{{generateColor(c.id)}};height:{{c.height}}px;margin-top:{{c.top}}">{{c.code}}</div>
         </div>
       </div>
     </md-content>
