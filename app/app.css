@@ -14,14 +14,17 @@ md-input-container .md-errors-spacer {
   height: 60px;
   max-height: 60px;
   min-height: 60px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  /*border-bottom: 1px solid rgba(0, 0, 0, 0.15);*/
   position: relative;
+  padding-left: 35px;
 }
 
 .hours {
   position: absolute;
   left:2px;
-  bottom:2px;
+  top:2px;
+  /*bottom:2px;*/
   margin: 0;
 }
 

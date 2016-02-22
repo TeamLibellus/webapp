@@ -1,5 +1,14 @@
 libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', function($scope, $http, $mdSidenav, $log) {
 
+  $scope.courses = {
+    "Mon": {},
+    "Tue": {},
+    "Wed": {},
+    "Thu": {},
+    "Fri": {},
+    "Sat": {},
+  };
+
   $scope.days = [{
     name: "Monday",
     abr: "Mon"
@@ -17,8 +26,53 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
     abr: "Fri"
   }];
 
-  $scope.hours = ["8:00am", "9:00am", "10:00am", "11:00am", "12:00pm", "1:00pm", "2:00pm",
-  "3:00pm", "4:00pm", "5:00pm", "6:00pm", "7:00pm", "8:00pm", "9:00pm", "10:00pm"];
+  $scope.hours = [{
+    us: "8am",
+    eu: "08:00"
+  }, {
+    us: "9am",
+    eu: "09:00"
+  }, {
+    us: "10am",
+    eu: "10:00"
+  }, {
+    us: "11am",
+    eu: "11:00"
+  }, {
+    us: "12pm",
+    eu: "12:00"
+  }, {
+    us: "1pm",
+    eu: "13:00"
+  }, {
+    us: "2pm",
+    eu: "14:00"
+  }, {
+    us: "3pm",
+    eu: "15:00"
+  }, {
+    us: "4pm",
+    eu: "16:00"
+  }, {
+    us: "5pm",
+    eu: "17:00"
+  }, {
+    us: "6pm",
+    eu: "18:00"
+  }, {
+    us: "7pm",
+    eu: "19:00"
+  }, {
+    us: "8pm",
+    eu: "20:00"
+  }, {
+    us: "9pm",
+    eu: "21:00"
+  }, {
+    us: "10pm",
+    eu: "22:00"
+  }];
+
   $scope.levels = [100, 200, 300, 400, 500, 600];
 
   $scope.terms = [];
@@ -37,19 +91,18 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
     if (i > -1) {
       $log.debug("Del");
       $scope.selectedLevels.splice(i, 1);
-    }
-    else {
+    } else {
       $log.debug("Add");
       $scope.selectedLevels.push(level);
     }
     $log.debug($scope.selectedLevels);
   };
 
-  $scope.openNavbar = function () {
+  $scope.openNavbar = function() {
     $mdSidenav('navbar').open()
-    .then(function () {
-      $log.debug("open navbar is done");
-    });
+      .then(function() {
+        $log.debug("open navbar is done");
+      });
   }
 
   $scope.getTerms = function() {
@@ -93,40 +146,33 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
   $scope.getSubjects(1);
   $scope.getClasses(1);
 
-  $scope.timeToMargin = function () {
+  $scope.timeToMargin = function() {
 
   }
 
-  $scope.courses = {
-    "Mon" : {},
-    "Tue" : {},
-    "Wed" : {},
-    "Thu" : {},
-    "Fri" : {},
-    "Sat" : {},
-  };
-
-  $scope.hours.forEach(function(e, i, t){
-    $scope.courses["Mon"][e.split(":")[0]] = [];
-    $scope.courses["Tue"][e.split(":")[0]] = [];
-    $scope.courses["Wed"][e.split(":")[0]] = [];
-    $scope.courses["Thu"][e.split(":")[0]] = [];
-    $scope.courses["Fri"][e.split(":")[0]] = [];
-    $scope.courses["Sat"][e.split(":")[0]] = [];
+  $scope.hours.forEach(function(e, i, t) {
+    $scope.courses["Mon"][e.eu.split(":")[0]] = [];
+    $scope.courses["Tue"][e.eu.split(":")[0]] = [];
+    $scope.courses["Wed"][e.eu.split(":")[0]] = [];
+    $scope.courses["Thu"][e.eu.split(":")[0]] = [];
+    $scope.courses["Fri"][e.eu.split(":")[0]] = [];
+    $scope.courses["Sat"][e.eu.split(":")[0]] = [];
   });
 
-  $scope.sortClasses = function () {
-    $scope.classes.forEach(function(e, i, t){
+  $scope.sortClasses = function() {
+    $scope.classes.forEach(function(e, i, t) {
       e.time.forEach(function(ee, ii, tt) {
         e.height = 60 * $scope.getDuration(ee.start, ee.end);
         e.top = ee.start.split(":")[1];
-        $scope.courses[ee.day][$scope.convertHours(ee.start)].push(e);
+        console.log(ee.start);
+        console.log(ee.day);
+        $scope.courses[ee.day][ee.start.split(":")[0]].push(e);
       });
     });
   }
 
   $scope.getDuration = function(start, end) {
-    var d = new Date("October 13, 2014 "+end+":00") - new Date("October 13, 2014 "+start+":00");
+    var d = new Date("October 13, 2014 " + end + ":00") - new Date("October 13, 2014 " + start + ":00");
     return ((d / 1000) / 3600);
   }
 
@@ -136,27 +182,22 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
     if (hoursUS === 0) {
       hoursUS = 12;
     }
-    return hoursUS.toString();
+    return parseInt(hours) >= 12 ? hoursUS.toString() + "pm" : hoursUS.toString() + "am";
   }
 
- function c_to_rgb(c) {
-      var b = c % 256,
-          g_0 = (c % 65536 - b),
-          r_0 = c - g_0 - b,
-          g = g_0 / 256,
-          r = r_0 / 65536;
+  function c_to_rgb(c) {
+    var b = c % 256,
+      g_0 = (c % 65536 - b),
+      r_0 = c - g_0 - b,
+      g = g_0 / 256,
+      r = r_0 / 65536;
 
-      return [r, g, b];
+    return [r, g, b];
   }
-  $scope.generateColor = function (id) {
+  $scope.generateColor = function(id) {
     var tmp = parseInt((id * 0xFFFFFF) / 300).toString();
     var rgb = c_to_rgb(tmp);
     return "rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ")";
   }
 
-  // 0xFFFFFF -> 700
-  // x -> id;
-
-// 700 -> 0xFFFFFF
-// id -> x
 }]);

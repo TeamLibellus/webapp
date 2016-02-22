@@ -3,8 +3,8 @@
   <div flex>
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <md-button class="md-icon-button" aria-label="Settings">
-          <md-icon class="material-icons">replay</md-icon>
+        <md-button class="md-icon-button" aria-label="More" ng-click="openNavbar()">
+          <md-icon class="material-icons">settings_input_composite</md-icon>
         </md-button>
         <h2>
           <span>Libellus</span>
@@ -13,18 +13,15 @@
         <md-button class="md-icon-button" aria-label="Favorite">
           <md-icon class="material-icons">search</md-icon>
         </md-button>
-        <md-button class="md-icon-button" aria-label="More" ng-click="openNavbar()">
-          <md-icon class="material-icons">settings_input_composite</md-icon>
-        </md-button>
       </div>
     </md-toolbar>
-    <md-content layout="row" layout-fill>
+    <md-content layout="row" layout-fill md-scroll-y>
       <div flex ng-repeat="d in days" class="day-column" layout="column">
         <h3 class=".md-headline" style="text-align:center">{{d.name}}</h3>
         <div ng-repeat="h in hours" class="day-row" layout="row">
-          <p class="hours"><small>{{h}}</small></p>
+          <p class="hours"><small>{{h.us}}</small></p>
 
-          <div flex ng-repeat="c in courses[d.abr][h.split(':')[0]]" class="courses-box md-primary"
+          <div flex ng-repeat="c in courses[d.abr][h.eu.split(':')[0]]" class="courses-box md-primary"
           style="background-color:{{generateColor(c.id)}};height:{{c.height}}px;margin-top:{{c.top}}">{{c.code}}</div>
         </div>
       </div>
