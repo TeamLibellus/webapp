@@ -1,4 +1,7 @@
-before_deploy: rm -rf .git
+language: node_js
+node_js:
+  - stable
+before_deploy: rm -rf .git .travis.yml
 deploy:
   - provider: s3
     access_key_id: ${AWS_ACCESS_KEY}
