@@ -1,4 +1,4 @@
-libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', function($scope, $http, $mdSidenav, $log) {
+libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSidenav', '$log', '$mdMedia', function($scope, $mdDialog, $http, $mdSidenav, $log, $mdMedia) {
 
   $scope.courses = {
     "Mon": {},
@@ -164,8 +164,6 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
       e.time.forEach(function(ee, ii, tt) {
         e.height = 60 * $scope.getDuration(ee.start, ee.end);
         e.top = ee.start.split(":")[1];
-        console.log(ee.start);
-        console.log(ee.day);
         $scope.courses[ee.day][ee.start.split(":")[0]].push(e);
       });
     });
@@ -199,5 +197,42 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
     var rgb = c_to_rgb(tmp);
     return "rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ")";
   }
+
+$scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+
+  $scope.showAdvanced = function(ev, c) {
+    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+
+    $mdDialog.show({
+      controller: function ($scope) {
+        $scope.c = c;
+        console.log(c);
+
+        $scope.addCourse = function() {
+          
+        }
+
+      },
+      templateUrl: './app/partials/dialogCourse.html',
+      parent: angular.element(document.body),
+      targetEvent: ev,
+      clickOutsideToClose:true,
+      fullscreen: useFullScreen
+    })
+    .then(function(answer) {
+      $scope.status = 'You said the information was "' + answer + '".';
+    }, function() {
+      $scope.status = 'You cancelled the dialog.';
+    });
+
+
+
+    $scope.$watch(function() {
+      return $mdMedia('xs') || $mdMedia('sm');
+    }, function(wantsFullScreen) {
+      $scope.customFullscreen = (wantsFullScreen === true);
+    });
+
+  };
 
 }]);

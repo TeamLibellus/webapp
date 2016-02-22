@@ -4,7 +4,6 @@ md-input-container .md-errors-spacer {
 }
 
 .day-column {
-  /*border: 0 0 0 1px solid rgba(0, 0, 0, 0.15);*/
   border-left: 1px solid rgba(0, 0, 0, 0.15);
   padding-left: 8px;
   padding-right: 8px;
@@ -15,7 +14,6 @@ md-input-container .md-errors-spacer {
   max-height: 60px;
   min-height: 60px;
   border-top: 1px solid rgba(0, 0, 0, 0.15);
-  /*border-bottom: 1px solid rgba(0, 0, 0, 0.15);*/
   position: relative;
   padding-left: 35px;
 }
@@ -24,7 +22,6 @@ md-input-container .md-errors-spacer {
   position: absolute;
   left:2px;
   top:2px;
-  /*bottom:2px;*/
   margin: 0;
 }
 
@@ -33,4 +30,6 @@ md-input-container .md-errors-spacer {
   background-color: rgb(33,150,243);
   margin-right: 5px;
   overflow: hidden;
+  box-sizing: border-box;
+  width: 0;
 }
