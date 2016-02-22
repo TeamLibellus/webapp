@@ -12,6 +12,9 @@ libellus.config(['$routeProvider',
     });
   }
 ])
+.config(['$locationProvider', function($locationProvider) {
+  $locationProvider.html5Mode({enabled: true, requireBase: false}).hashPrefix('!');
+}])
 .config(['$httpProvider', function($httpProvider) {
   $httpProvider.defaults.useXDomain = true;
   $httpProvider.defaults.headers['Content-Type'] = 'application/json';
