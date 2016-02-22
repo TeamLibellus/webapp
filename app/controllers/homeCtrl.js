@@ -1,14 +1,5 @@
 libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSidenav', '$log', '$mdMedia', function($scope, $mdDialog, $http, $mdSidenav, $log, $mdMedia) {
 
-  $scope.courses = {
-    "Mon": {},
-    "Tue": {},
-    "Wed": {},
-    "Thu": {},
-    "Fri": {},
-    "Sat": {},
-  };
-
   $scope.days = [{
     name: "Monday",
     abr: "Mon"
@@ -78,31 +69,28 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
   $scope.terms = [];
   $scope.subjects = [];
   $scope.classes = [];
-  $scope.selectedLevels = [];
-  $scope.minimumSeats = 1;
-  $scope.rowHeight = 40;
-  $scope.selectedClassesOnly = false;
-  $scope.classConflicts = true;
 
-  $scope.selectedTerm;
+  $scope.filterData = {
+    selectedTerm: 0,
+    selectedSubject: 0,
+    selectedLevels: [],
+    minimumSeats: 1,
+    rowHeight: 40,
+    selectedClassesOnly: false,
+    classConflicts: true
+  };
 
   $scope.toggleSelection = function toggleSelection(level) {
-    var i = $scope.selectedLevels.indexOf(level);
+    var i = $scope.filterData.selectedLevels.indexOf(level);
     if (i > -1) {
-      $log.debug("Del");
-      $scope.selectedLevels.splice(i, 1);
+      $scope.filterData.selectedLevels.splice(i, 1);
     } else {
-      $log.debug("Add");
-      $scope.selectedLevels.push(level);
+      $scope.filterData.selectedLevels.push(level);
     }
-    $log.debug($scope.selectedLevels);
   };
 
   $scope.openNavbar = function() {
-    $mdSidenav('navbar').open()
-      .then(function() {
-        $log.debug("open navbar is done");
-      });
+    $mdSidenav('navbar').open();
   }
 
   $scope.getTerms = function() {
@@ -134,6 +122,7 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
       method: 'GET',
       url: 'http://api.libell.us/subjects/' + subjectId + '/classes'
     }).then(function successCallback(response) {
+      $scope.resetCourses();
       $scope.classes = response.data;
       console.log($scope.classes);
       $scope.sortClasses();
@@ -142,22 +131,29 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
     });
   }
 
-  $scope.getTerms();
-  $scope.getSubjects(1);
-  $scope.getClasses(1);
-
   $scope.timeToMargin = function() {
 
   }
 
-  $scope.hours.forEach(function(e, i, t) {
-    $scope.courses["Mon"][e.eu.split(":")[0]] = [];
-    $scope.courses["Tue"][e.eu.split(":")[0]] = [];
-    $scope.courses["Wed"][e.eu.split(":")[0]] = [];
-    $scope.courses["Thu"][e.eu.split(":")[0]] = [];
-    $scope.courses["Fri"][e.eu.split(":")[0]] = [];
-    $scope.courses["Sat"][e.eu.split(":")[0]] = [];
-  });
+  $scope.resetCourses = function() {
+    $scope.courses = {
+      "Mon": {},
+      "Tue": {},
+      "Wed": {},
+      "Thu": {},
+      "Fri": {},
+      "Sat": {},
+    };
+    $scope.hours.forEach(function(e, i, t) {
+      $scope.courses["Mon"][e.eu.split(":")[0]] = [];
+      $scope.courses["Tue"][e.eu.split(":")[0]] = [];
+      $scope.courses["Wed"][e.eu.split(":")[0]] = [];
+      $scope.courses["Thu"][e.eu.split(":")[0]] = [];
+      $scope.courses["Fri"][e.eu.split(":")[0]] = [];
+      $scope.courses["Sat"][e.eu.split(":")[0]] = [];
+    });
+  }
+
 
   $scope.sortClasses = function() {
     $scope.classes.forEach(function(e, i, t) {
@@ -192,38 +188,60 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
 
     return [r, g, b];
   }
+
   $scope.generateColor = function(id) {
     var tmp = parseInt((id * 0xFFFFFF) / 300).toString();
     var rgb = c_to_rgb(tmp);
     return "rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ")";
   }
 
-$scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+  $scope.updateSubjects = function() {
+    console.log("coucou");
+    $scope.filterData.selectedSubject = 0;
+    $scope.classes = [];
+    $scope.courses = [];
+    $scope.getSubjects($scope.filterData.selectedTerm);
+  }
+
+  $scope.updateClasses = function() {
+    $scope.classes = [];
+    $scope.getClasses($scope.filterData.selectedSubject);
+  }
+
+  $scope.logAll = function() {
+    console.log("-------------");
+    console.log($scope.filterData);
+  }
+
+  $scope.getTerms();
+  $scope.resetCourses();
+
+  $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 
   $scope.showAdvanced = function(ev, c) {
-    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && $scope.customFullscreen;
 
     $mdDialog.show({
-      controller: function ($scope) {
-        $scope.c = c;
-        console.log(c);
+        controller: function($scope) {
+          $scope.c = c;
+          console.log(c);
 
-        $scope.addCourse = function() {
-          
-        }
+          $scope.addCourse = function() {
 
-      },
-      templateUrl: './app/partials/dialogCourse.html',
-      parent: angular.element(document.body),
-      targetEvent: ev,
-      clickOutsideToClose:true,
-      fullscreen: useFullScreen
-    })
-    .then(function(answer) {
-      $scope.status = 'You said the information was "' + answer + '".';
-    }, function() {
-      $scope.status = 'You cancelled the dialog.';
-    });
+          }
+
+        },
+        templateUrl: './app/partials/dialogCourse.html',
+        parent: angular.element(document.body),
+        targetEvent: ev,
+        clickOutsideToClose: true,
+        fullscreen: useFullScreen
+      })
+      .then(function(answer) {
+        $scope.status = 'You said the information was "' + answer + '".';
+      }, function() {
+        $scope.status = 'You cancelled the dialog.';
+      });
 
 
 
@@ -234,5 +252,6 @@ $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
     });
 
   };
+
 
 }]);

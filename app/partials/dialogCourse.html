@@ -1,0 +1,29 @@
+
+
+<md-dialog aria-label="{{c.name}}"  ng-cloak>
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>{{c.name}}</h2>
+        <span flex></span>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <p>{{c.section}}</p>
+        <p>{{c.description}}</p>
+        <p>{{c.room}} - {{c.teacher.name}} RATE : {{c.teacher.rate}}</p>
+        <a href="{{c.teacher.rateLink}}">RateMyProfessor</a>
+        <hr>
+        Capacity: {{c.capacity}}
+        Enrollment: {{c.enrollment}}
+        Seat left: {{c.capacity-c.enrollment}}
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button ng-click="addCourse()" style="margin-right:20px;">
+        Add to my courses
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
