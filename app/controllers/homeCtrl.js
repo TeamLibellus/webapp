@@ -1,14 +1,5 @@
 libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', function($scope, $http, $mdSidenav, $log) {
 
-  $scope.courses = {
-    "Mon": {},
-    "Tue": {},
-    "Wed": {},
-    "Thu": {},
-    "Fri": {},
-    "Sat": {},
-  };
-
   $scope.days = [{
     name: "Monday",
     abr: "Mon"
@@ -78,31 +69,28 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
   $scope.terms = [];
   $scope.subjects = [];
   $scope.classes = [];
-  $scope.selectedLevels = [];
-  $scope.minimumSeats = 1;
-  $scope.rowHeight = 40;
-  $scope.selectedClassesOnly = false;
-  $scope.classConflicts = true;
 
-  $scope.selectedTerm;
+$scope.filterData = {
+  selectedTerm: 0,
+  selectedSubject: 0,
+  selectedLevels: [],
+  minimumSeats: 1,
+  rowHeight: 40,
+  selectedClassesOnly: false,
+  classConflicts: true
+};
 
   $scope.toggleSelection = function toggleSelection(level) {
-    var i = $scope.selectedLevels.indexOf(level);
+    var i = $scope.filterData.selectedLevels.indexOf(level);
     if (i > -1) {
-      $log.debug("Del");
-      $scope.selectedLevels.splice(i, 1);
+      $scope.filterData.selectedLevels.splice(i, 1);
     } else {
-      $log.debug("Add");
-      $scope.selectedLevels.push(level);
+      $scope.filterData.selectedLevels.push(level);
     }
-    $log.debug($scope.selectedLevels);
   };
 
   $scope.openNavbar = function() {
-    $mdSidenav('navbar').open()
-      .then(function() {
-        $log.debug("open navbar is done");
-      });
+    $mdSidenav('navbar').open();
   }
 
   $scope.getTerms = function() {
@@ -134,6 +122,7 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
       method: 'GET',
       url: 'http://api.libell.us/subjects/' + subjectId + '/classes'
     }).then(function successCallback(response) {
+      $scope.resetCourses();
       $scope.classes = response.data;
       console.log($scope.classes);
       $scope.sortClasses();
@@ -142,22 +131,29 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
     });
   }
 
-  $scope.getTerms();
-  $scope.getSubjects(1);
-  $scope.getClasses(1);
-
   $scope.timeToMargin = function() {
 
   }
 
-  $scope.hours.forEach(function(e, i, t) {
-    $scope.courses["Mon"][e.eu.split(":")[0]] = [];
-    $scope.courses["Tue"][e.eu.split(":")[0]] = [];
-    $scope.courses["Wed"][e.eu.split(":")[0]] = [];
-    $scope.courses["Thu"][e.eu.split(":")[0]] = [];
-    $scope.courses["Fri"][e.eu.split(":")[0]] = [];
-    $scope.courses["Sat"][e.eu.split(":")[0]] = [];
-  });
+  $scope.resetCourses = function () {
+    $scope.courses = {
+      "Mon": {},
+      "Tue": {},
+      "Wed": {},
+      "Thu": {},
+      "Fri": {},
+      "Sat": {},
+    };
+    $scope.hours.forEach(function(e, i, t) {
+      $scope.courses["Mon"][e.eu.split(":")[0]] = [];
+      $scope.courses["Tue"][e.eu.split(":")[0]] = [];
+      $scope.courses["Wed"][e.eu.split(":")[0]] = [];
+      $scope.courses["Thu"][e.eu.split(":")[0]] = [];
+      $scope.courses["Fri"][e.eu.split(":")[0]] = [];
+      $scope.courses["Sat"][e.eu.split(":")[0]] = [];
+    });
+  }
+
 
   $scope.sortClasses = function() {
     $scope.classes.forEach(function(e, i, t) {
@@ -194,10 +190,31 @@ libellus.controller('homeController', ['$scope', '$http', '$mdSidenav', '$log', 
 
     return [r, g, b];
   }
+
   $scope.generateColor = function(id) {
     var tmp = parseInt((id * 0xFFFFFF) / 300).toString();
     var rgb = c_to_rgb(tmp);
     return "rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ")";
   }
+
+  $scope.updateSubjects = function () {
+    $scope.filterData.selectedSubject = 0;
+    $scope.classes = [];
+    $scope.courses = [];
+    $scope.getSubjects($scope.filterData.selectedTerm);
+  }
+
+  $scope.updateClasses = function () {
+    $scope.classes = [];
+    $scope.getClasses($scope.filterData.selectedSubject);
+  }
+
+  $scope.logAll = function () {
+    console.log("-------------");
+    console.log($scope.filterData);
+  }
+
+  $scope.getTerms();
+  $scope.resetCourses();
 
 }]);
