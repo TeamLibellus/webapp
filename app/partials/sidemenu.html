@@ -33,7 +33,7 @@
           <label>Levels</label>
           <div layout>
             <div layout="row" layout-wrap md-scroll-y>
-              <md-checkbox ng-repeat="l in filterData.levels track by $index" flex="33" layout="row" value="{{l.value}}" ng-model="levels[$index]" ng-checked="{{levels[$index].active}}" ng-click="toggleSelection(l)">
+              <md-checkbox ng-repeat="l in filterData.levels track by $index" flex="33" layout="row" value="{{l.active}}" ng-model="filterData.levels[$index].active">
                 {{l.value}}
               </md-checkbox>
             </div>

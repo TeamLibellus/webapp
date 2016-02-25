@@ -69,24 +69,20 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
     $scope.classes = [];
 
     $scope.filterData = {
-      selectedTerm: 0,
-      selectedSubject: 0,
+      selectedTerm: 1,
+      selectedSubject: 1,
       levels: [
-        {value: 100, active: false},
-        {value: 200, active: false},
-        {value: 300, active: false},
-        {value: 400, active: false},
-        {value: 500, active: false},
-        {value: 600, active: false}
+        {value: 100, active: true},
+        {value: 200, active: true},
+        {value: 300, active: true},
+        {value: 400, active: true},
+        {value: 500, active: true},
+        {value: 600, active: true}
       ],
       minimumSeats: 1,
       rowHeight: 40,
       selectedClassesOnly: false,
       classConflicts: true,
-    };
-
-    $scope.toggleSelection = function toggleSelection(level) {
-      level.active = !level.active;
     };
 
     $scope.openNavbar = function() {
@@ -213,10 +209,6 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
       console.log($scope.filterData.levels);
     }
 
-    $scope.getTerms();
-    $scope.resetCourses();
-
-    $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 
     $scope.showAdvanced = function(ev, c) {
       var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && $scope.customFullscreen;
@@ -252,5 +244,18 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
       });
 
     };
+
+    $scope.levelFilter = function(level){
+      return ($scope.filterData.levels[Math.floor(parseInt(level.code) / 100) - 1].active);
+    }
+
+    $scope.getTerms();
+    $scope.resetCourses();
+    if ($scope.filterData.selectedTerm != 0) {
+      $scope.getSubjects($scope.filterData.selectedTerm);
+      $scope.updateClasses();
+    }
+
+    $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 
   }]);
