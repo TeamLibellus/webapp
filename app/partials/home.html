@@ -24,8 +24,12 @@
         <div ng-repeat="h in hours" class="day-row" layout="row">
           <p class="hours"><small>{{h.us}}</small></p>
 
-          <div flex ng-repeat="c in courses[d.abr][h.eu.split(':')[0]] | filter:levelFilter" class="courses-box md-primary"
-          style="background-color:{{generateColor(c.id)}};height:{{c.height}}px;margin-top:{{c.top}}" ng-click="showAdvanced($event, c)">{{c.code}}</div>
+          <div flex ng-repeat="c in courses[d.abr][h.eu.split(':')[0]] | filter:levelFilter | filter:seatsFilter"
+            class="courses-box md-primary"
+            style="background-color:{{generateColor(c.id)}};height:{{c.height}}px;margin-top:{{c.top}}"
+            ng-click="showAdvanced($event, c)">
+              {{c.code}}
+          </div>
         </div>
       </div>
     </md-content>

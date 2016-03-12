@@ -51,17 +51,6 @@
           </div>
         </div>
 
-        <div layout="column">
-          <label>Row height</label>
-          <div layout>
-            <div flex="10" layout layout-align="center center">
-              <span class="md-body-1">{{filterData.rowHeight}}</span>
-            </div>
-            <md-slider flex ng-model="filterData.rowHeight" min="10" max="60" step="10">
-            </md-slider>
-          </div>
-        </div>
-
         <div layout="row">
           <p flex>Selected classes only</p>
           <md-switch flex="20" ng-model="filterData.selectedClassesOnly">

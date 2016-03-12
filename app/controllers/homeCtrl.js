@@ -245,8 +245,12 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
 
     };
 
-    $scope.levelFilter = function(level){
-      return ($scope.filterData.levels[Math.floor(parseInt(level.code) / 100) - 1].active);
+    $scope.levelFilter = function(course){
+      return ($scope.filterData.levels[Math.floor(parseInt(course.code) / 100) - 1].active);
+    }
+
+    $scope.seatsFilter = function(course){
+      return (course.capacity - course.enrollment >= $scope.filterData.minimumSeats);
     }
 
     $scope.getTerms();
