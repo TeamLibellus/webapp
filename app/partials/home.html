@@ -1,5 +1,6 @@
 <section layout="row" flex>
   <div ng-include src="'app/partials/sidemenu.html'"></div>
+  <div ng-include src="'app/partials/dialogLoginCourse.html'"></div>
   <div flex>
     <md-toolbar>
       <div class="md-toolbar-tools">
@@ -12,6 +13,9 @@
         <span flex></span>
         <md-switch ng-model="searchmode" ng-change="switch()" aria-label="Switch search/profile">
         </md-switch>
+        <md-button class="md-icon-button" aria-label="Favorite" ng-click="showLoginDialog($event)">
+          <md-icon class="material-icons">perm_identity</md-icon>
+        </md-button>
         <md-button class="md-icon-button" aria-label="Favorite">
           <md-icon class="material-icons">search</md-icon>
         </md-button>

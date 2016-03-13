@@ -294,6 +294,35 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
     return (course.capacity - course.enrollment >= $scope.filterData.minimumSeats);
   }
 
+    $scope.showLoginDialog = function(ev) {
+    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+    $mdDialog.show({
+      controller: loginController,
+      templateUrl: '/app/partials/dialogLoginRegister.html',
+      parent: angular.element(document.body),
+      targetEvent: ev,
+      clickOutsideToClose:true,
+      fullscreen: useFullScreen
+    })
+    .then(function(answer) {
+      $scope.status = 'You said the information was "' + answer + '".';
+    }, function() {
+      $scope.status = 'You cancelled the dialog.';
+    });
+    $scope.$watch(function() {
+      return $mdMedia('xs') || $mdMedia('sm');
+    }, function(wantsFullScreen) {
+      $scope.customFullscreen = (wantsFullScreen === true);
+    });
+  };
+
+    $scope.getTerms();
+    $scope.resetCourses();
+    if ($scope.filterData.selectedTerm != 0) {
+      $scope.getSubjects($scope.filterData.selectedTerm);
+      $scope.updateClasses();
+    }
+
   $scope.getTerms();
   $scope.resetCourses();
   if ($scope.filterData.selectedTerm != 0) {
