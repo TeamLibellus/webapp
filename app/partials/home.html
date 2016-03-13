@@ -6,13 +6,12 @@
         <md-button class="md-icon-button" aria-label="More" ng-click="openNavbar()">
           <md-icon class="material-icons">settings_input_composite</md-icon>
         </md-button>
-        <md-button class="md-icon-button" aria-label="More" ng-click="logAll()">
-          <md-icon class="material-icons">settings_input_composite</md-icon>
-        </md-button>
         <h2>
           <span>Libellus</span>
         </h2>
         <span flex></span>
+        <md-switch ng-model="searchmode" ng-change="switch()" aria-label="Switch search/profile">
+        </md-switch>
         <md-button class="md-icon-button" aria-label="Favorite">
           <md-icon class="material-icons">search</md-icon>
         </md-button>
@@ -24,14 +23,20 @@
         <div ng-repeat="h in hours" class="day-row" layout="row">
           <p class="hours"><small>{{h.us}}</small></p>
 
-          <div flex ng-repeat="c in courses[d.abr][h.eu.split(':')[0]] | filter:levelFilter | filter:seatsFilter"
-            class="courses-box md-primary"
-            style="background-color:{{generateColor(c.id)}};height:{{c.height}}px;margin-top:{{c.top}}"
-            ng-click="showAdvanced($event, c)">
-              {{c.code}}
-          </div>
+        <div ng-hide="searchmode" flex ng-repeat="c in courses[d.abr][h.eu.split(':')[0]] | filter:levelFilter | filter:seatsFilter"
+          class="courses-box md-primary"
+          style="background-color:{{generateColor(c.id)}};height:{{c.height}}px;margin-top:{{c.top}}"
+          ng-click="showAdvanced($event, c)">
+          {{c.code}}
         </div>
+        <div ng-show="searchmode" flex ng-repeat="c in ClassesService.mycourses[d.abr][h.eu.split(':')[0]] | filter:levelFilter | filter:seatsFilter"
+        class="courses-box md-primary"
+        style="background-color:{{generateColor(c.id)}};height:{{c.height}}px;margin-top:{{c.top}}"
+        ng-click="showAdvanced($event, c)">
+        {{c.code}}
       </div>
-    </md-content>
-  </div>
+      </div>
+    </div>
+  </md-content>
+</div>
 </section>

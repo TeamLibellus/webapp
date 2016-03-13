@@ -20,9 +20,14 @@
         Seat left: {{c.capacity-c.enrollment}}
       </div>
     </md-dialog-content>
-    <md-dialog-actions layout="row">
+    <md-dialog-actions layout="row" ng-hide="c.added">
       <md-button ng-click="addCourse()" style="margin-right:20px;">
         Add to my courses
+      </md-button>
+    </md-dialog-actions>
+    <md-dialog-actions layout="row" ng-show="c.added">
+      <md-button ng-click="removeCourse(c)" style="margin-right:20px;">
+        Remove from my courses
       </md-button>
     </md-dialog-actions>
   </form>
