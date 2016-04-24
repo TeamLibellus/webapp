@@ -3,7 +3,7 @@ libellus.factory('AuthenticationService', ['$http', '$cookieStore', '$rootScope'
 
       var service = {};
 
-      var baseUrl = "http://api.libell.us/";
+      var baseUrl = "http://192.168.1.154:8080/";
 
         service.Login = function (username, password, success, failure) {
           /* HASH LE MDP */
