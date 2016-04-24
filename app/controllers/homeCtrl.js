@@ -1,4 +1,4 @@
-libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSidenav', '$log', '$mdMedia', 'ClassesService', function($scope, $mdDialog, $http, $mdSidenav, $log, $mdMedia, ClassesService) {
+libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSidenav', '$log', '$mdMedia', 'ClassesService', 'AuthenticationService', function($scope, $mdDialog, $http, $mdSidenav, $log, $mdMedia, ClassesService, AuthenticationService  ) {
 
   $scope.days = [{
     name: "Monday",
@@ -69,6 +69,14 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
   $scope.classes = [];
 
   $scope.ClassesService = ClassesService;
+  $scope.AuthenticationService = AuthenticationService;
+
+  $scope.AuthenticationService.isLog(function(res){
+    console.log(res);
+  },
+  function(res){
+    alert("Not logged !");
+  })
 
   $scope.filterData = {
     selectedTerm: 1,
@@ -297,7 +305,7 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
     $scope.showLoginDialog = function(ev) {
     var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
     $mdDialog.show({
-      controller: loginController,
+      controller: 'loginController',
       templateUrl: '/app/partials/dialogLoginRegister.html',
       parent: angular.element(document.body),
       targetEvent: ev,

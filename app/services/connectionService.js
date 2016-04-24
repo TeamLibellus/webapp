@@ -1,52 +1,60 @@
-libellus.factory('AuthenticationService', ['$http', '$cookieStore', '$rootScope', '$location',
-    function ($http, $cookieStore, $rootScope, $location) {
+libellus.factory('AuthenticationService', ['$http', '$rootScope', '$location',
+    function ($http, $rootScope, $location) {
 
       var service = {};
 
       var baseUrl = "http://192.168.1.154:8080/";
 
-        service.Login = function (username, password, success, failure) {
-          /* HASH LE MDP */
-          $http.post(baseUrl + 'login', {email:username, hash:password}).
-            then(function(response) {
-              service.SetCredentials(username);
-              success(response.data);
-            }, function(response) {
-              failure(response.data);
-          });
-        };
+      service.Register = function (_username, _email, _password, success, failure) {
+        $http.post(baseUrl + 'users', {username:_username, email:_email, password:_password}).
+          then(function(response) {
+            success(response.data);
+          }, function(response) {
+            failure(response.data);
+        });
+      };
+
+      service.Login = function (_email, _password, success, failure) {
+        $http.post(baseUrl + 'auth/local', {email:_email, password:_password}).
+          then(function(response) {
+            service.SetCredentials(username, response.authToken);
+            success(response.data);
+          }, function(response) {
+            failure(response.data);
+        });
+      };
 
         service.Logout = function() {
-          user = service.GetUser()
-          $http.post(baseUrl + 'logout').
+          user = service.GetUser();
+          $http.post(baseUrl + 'auth/logout').
             then(function(response) {
-              service.ClearCredentials()
+              service.ClearCredentials();
               $location.path('/');
             }, function(response) {
           });
         };
 
         service.isLog = function (success, failure) {
-            $http.get(baseUrl + 'checklogin').
+            $http.get(baseUrl + 'users/me').
               then(function(response) {
-                success();
+                success(response);
               }, function(response) {
-                failure();
+                failure(response);
               });
         };
 
         service.GetUser = function () {
           var cook = $cookieStore.get("globals")
-          var user;
           if (cook) {
-            return cook.currentUser.username;
+            return cook.currentUser;
           }
         }
 
-        service.SetCredentials = function (username) {
+        service.SetCredentials = function (username, token) {
             $rootScope.globals = {
                 currentUser: {
-                    username: username
+                    username: username,
+                    token: token
                 }
             };
             $cookieStore.put('globals', $rootScope.globals);
