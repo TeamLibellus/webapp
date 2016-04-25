@@ -26,13 +26,6 @@ libellus.factory('AuthenticationService', ['$http', '$rootScope', '$location', '
 
         service.Logout = function() {
           service.ClearCredentials();
-          // user = service.GetUser();
-          // $http.post(baseUrl + 'auth/logout').
-          //   then(function(response) {
-          //     service.ClearCredentials();
-          //     $location.path('/');
-          //   }, function(response) {
-          // });
         };
 
         service.isLog = function (success, failure) {

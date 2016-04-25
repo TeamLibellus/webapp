@@ -73,13 +73,24 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
   $scope.AuthenticationService = AuthenticationService;
 
   $scope.logged;
+  $scope.schedulePublic = false;
   $scope.AuthenticationService.isLog(function(res){
     $scope.logged = true;
+    console.log(res);
+    if (res.data.is_logged)
+      $scope.schedulePublic = true;
     console.log($scope.logged);
   },
   function(res){
     $scope.logged = false;
   })
+
+  $scope.isUnlocked = function()
+  {
+    if ($scope.logged == true && $scope.schedulePublic == true)
+      return true;
+    return false;
+  }
 
   $scope.filterData = {
     selectedTerm: 1,
@@ -332,8 +343,6 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
       AuthenticationService.Logout();
       window.location.reload();
   }
-
-
 
   $scope.getTerms();
   $scope.resetCourses();
