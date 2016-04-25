@@ -1,12 +1,12 @@
-libellus.factory('AuthenticationService', ['$http', '$rootScope', '$location',
-    function ($http, $rootScope, $location) {
+libellus.factory('AuthenticationService', ['$http', '$rootScope', '$location', '$cookies',
+    function ($http, $rootScope, $location, $cookies) {
 
       var service = {};
 
       var baseUrl = "http://192.168.1.154:8080/";
 
-      service.Register = function (_username, _email, _password, success, failure) {
-        $http.post(baseUrl + 'users', {username:_username, email:_email, password:_password}).
+      service.Register = function (username, email, password, success, failure) {
+        $http.post(baseUrl + 'users', {username:username, email:email, password:password}).
           then(function(response) {
             success(response.data);
           }, function(response) {
@@ -14,10 +14,10 @@ libellus.factory('AuthenticationService', ['$http', '$rootScope', '$location',
         });
       };
 
-      service.Login = function (_email, _password, success, failure) {
-        $http.post(baseUrl + 'auth/local', {email:_email, password:_password}).
+      service.Login = function (email, password, success, failure) {
+        $http.post(baseUrl + 'auth/local', {email:email, password:password}).
           then(function(response) {
-            service.SetCredentials(username, response.authToken);
+            service.SetCredentials(response.data.authToken);
             success(response.data);
           }, function(response) {
             failure(response.data);
@@ -44,20 +44,13 @@ libellus.factory('AuthenticationService', ['$http', '$rootScope', '$location',
         };
 
         service.GetUser = function () {
-          var cook = $cookieStore.get("globals")
-          if (cook) {
-            return cook.currentUser;
-          }
+          var token = $cookies.getObject("globals");
+          return token;
         }
 
-        service.SetCredentials = function (username, token) {
-            $rootScope.globals = {
-                currentUser: {
-                    username: username,
-                    token: token
-                }
-            };
-            $cookieStore.put('globals', $rootScope.globals);
+        service.SetCredentials = function (token) {
+          console.log("Setting Cookie" + token);
+            $cookies.putObject('globals', token);
         };
 
         service.ClearCredentials = function () {

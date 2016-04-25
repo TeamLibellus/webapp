@@ -71,11 +71,14 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
   $scope.ClassesService = ClassesService;
   $scope.AuthenticationService = AuthenticationService;
 
+  $scope.logged;
   $scope.AuthenticationService.isLog(function(res){
-    console.log(res);
+    $scope.logged = true;
+    console.log("Loggé !");
   },
   function(res){
-    alert("Not logged !");
+    console.log("Non Loggé !");
+    $scope.logged = false;
   })
 
   $scope.filterData = {
