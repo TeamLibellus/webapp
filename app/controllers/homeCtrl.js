@@ -1,4 +1,31 @@
-libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSidenav', '$log', '$mdMedia', 'ClassesService', function($scope, $mdDialog, $http, $mdSidenav, $log, $mdMedia, ClassesService) {
+libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSidenav', '$log', '$mdMedia', 'ClassesService', 'webNotification', function($scope, $mdDialog, $http, $mdSidenav, $log, $mdMedia, ClassesService, webNotification) {
+
+  $scope.search = function (row) {
+    return (angular.lowercase(row.name || "").indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+    angular.lowercase(row.section || "").indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+    angular.lowercase(row.teacher.name || "").indexOf(angular.lowercase($scope.query) || '') !== -1);
+  };
+
+  webNotification.showNotification('Example Notification2', {
+      body: 'Notification Text...',
+      icon: '../../bower_components/HTML5-Desktop-Notifications/alert.ico',
+      onClick: function onNotificationClicked() {
+          window.alert('Notification clicked.');
+      },
+      autoClose: 4000 //auto close the notification after 2 seconds (you manually close it via hide function)
+  }, function onShow(error, hide) {
+      if (error) {
+          window.alert('Unable to show notification: ' + error.message);
+      } else {
+          console.log('Notification Shown.');
+
+          setTimeout(function hideNotification() {
+              console.log('Hiding notification....');
+              hide(); //manually close the notification (or let the autoClose close it)
+          }, 5000);
+      }
+  });
+
 
   $scope.days = [{
     name: "Monday",
@@ -94,38 +121,33 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
   $scope.getTerms = function() {
     $http({
       method: 'GET',
-      url: 'http://api.libell.us/terms'
+      url: 'http://192.168.1.154:8080/terms'
     }).then(function successCallback(response) {
       $scope.terms = response.data;
-      console.log($scope.terms);
     }, function errorCallback(response) {
-      console.log(response);
     });
   }
 
   $scope.getSubjects = function(term) {
     $http({
       method: 'GET',
-      url: 'http://api.libell.us/subjects'
+      url: 'http://192.168.1.154:8080/subjects'
     }).then(function successCallback(response) {
       $scope.subjects = response.data;
-      console.log($scope.subjects);
     }, function errorCallback(response) {
-      console.log(response);
     });
   }
 
   $scope.getClasses = function(subjectId) {
     $http({
       method: 'GET',
-      url: 'http://api.libell.us/subjects/' + subjectId + '/classes'
+      url: 'http://192.168.1.154:8080/subjects/' + subjectId + '/classes'
     }).then(function successCallback(response) {
       $scope.resetCourses();
       $scope.classes = response.data;
-      console.log($scope.classes);
+      console.log(response.data);
       $scope.sortClasses();
     }, function errorCallback(response) {
-      console.log(response);
     });
   }
 
@@ -252,15 +274,40 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
               }
             });
           });
-
+          $http.post('http://192.168.1.154:8080/users/me/removeClass', {
+            "classId" : c.id,
+          });
 
         }
 
         $scope.addCourse = function() {
+          webNotification.showNotification('Poney', {
+             body: 'Enchanté',
+            //  icon: 'my-icon.ico',
+             onClick: function onNotificationClicked() {
+               console.log('Notification clicked.');
+             },
+             autoClose: 4000, //auto close the notification after 4 seconds (you can manually close it via hide function)
+          }, function onShow(error, hide) {
+             if (error) {
+                 window.alert('Unable to show notification: ' + error.message);
+             } else {
+                 setTimeout(function hideNotification() {
+                     hide();
+                 }, 5000);
+             }
+          });
           c.time.forEach(function(e, k, v) {
             c.added = true;
             ClassesService.mycourses[c.time[k].day][c.time[k].start.split(":")[0]].push(c);
           });
+          $http.post('http://192.168.1.154:8080/users/me/addClass', {
+            "classId" : c.id,
+          });
+        }
+
+        $scope.close = function() {
+          $mdDialog.hide();
         }
 
       },
@@ -294,7 +341,7 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
     return (course.capacity - course.enrollment >= $scope.filterData.minimumSeats);
   }
 
-    $scope.showLoginDialog = function(ev) {
+  $scope.showLoginDialog = function(ev) {
     var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
     $mdDialog.show({
       controller: loginController,
@@ -315,13 +362,6 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
       $scope.customFullscreen = (wantsFullScreen === true);
     });
   };
-
-    $scope.getTerms();
-    $scope.resetCourses();
-    if ($scope.filterData.selectedTerm != 0) {
-      $scope.getSubjects($scope.filterData.selectedTerm);
-      $scope.updateClasses();
-    }
 
   $scope.getTerms();
   $scope.resetCourses();

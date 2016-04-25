@@ -1,4 +1,4 @@
-libellus = angular.module('libellus', ['ngRoute', 'ngMaterial', 'ngMessages', 'ngAnimate', 'ngAria']);
+libellus = angular.module('libellus', ['ngRoute', 'ngMaterial', 'ngMessages', 'ngAnimate', 'ngAria', 'angular-web-notification']);
 
 libellus.config(['$routeProvider',
   function($routeProvider) {
@@ -18,6 +18,7 @@ libellus.config(['$routeProvider',
 .config(['$httpProvider', function($httpProvider) {
   $httpProvider.defaults.useXDomain = true;
   $httpProvider.defaults.headers['Content-Type'] = 'application/json';
+  // $httpProvider.defaults.withCredentials = true;
 }])
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
