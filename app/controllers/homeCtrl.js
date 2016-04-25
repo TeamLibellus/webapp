@@ -1,4 +1,5 @@
-libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSidenav', '$log', '$mdMedia', 'ClassesService', 'AuthenticationService', function($scope, $mdDialog, $http, $mdSidenav, $log, $mdMedia, ClassesService, AuthenticationService  ) {
+libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSidenav', '$log', '$mdMedia', 'ClassesService', 'AuthenticationService',
+ function($scope, $mdDialog, $http, $mdSidenav, $log, $mdMedia, ClassesService, AuthenticationService) {
 
   $scope.days = [{
     name: "Monday",
@@ -74,10 +75,9 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
   $scope.logged;
   $scope.AuthenticationService.isLog(function(res){
     $scope.logged = true;
-    console.log("Loggé !");
+    console.log($scope.logged);
   },
   function(res){
-    console.log("Non Loggé !");
     $scope.logged = false;
   })
 
@@ -305,7 +305,7 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
     return (course.capacity - course.enrollment >= $scope.filterData.minimumSeats);
   }
 
-    $scope.showLoginDialog = function(ev) {
+  $scope.showLoginDialog = function(ev) {
     var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
     $mdDialog.show({
       controller: 'loginController',
@@ -327,12 +327,20 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
     });
   };
 
-    $scope.getTerms();
-    $scope.resetCourses();
-    if ($scope.filterData.selectedTerm != 0) {
-      $scope.getSubjects($scope.filterData.selectedTerm);
-      $scope.updateClasses();
-    }
+  $scope.logout = function(){
+    if (confirm("Do you really want to log out?"))
+      AuthenticationService.Logout();
+      window.location.reload();
+  }
+
+
+
+  $scope.getTerms();
+  $scope.resetCourses();
+  if ($scope.filterData.selectedTerm != 0) {
+    $scope.getSubjects($scope.filterData.selectedTerm);
+    $scope.updateClasses();
+  }
 
   $scope.getTerms();
   $scope.resetCourses();

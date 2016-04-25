@@ -1,16 +1,16 @@
 libellus = angular.module('libellus', ['ngRoute', 'ngMaterial', 'ngMessages', 'ngAnimate', 'ngAria', 'ngCookies']);
 
 libellus.config(['$routeProvider',
-  function($routeProvider) {
-    $routeProvider.
-    when('/', {
-      templateUrl: 'app/partials/home.html',
-      controller: 'homeController'
-    }).
-    otherwise({
-      redirectTo: '/'
-    });
-  }
+function($routeProvider) {
+  $routeProvider.
+  when('/', {
+    templateUrl: 'app/partials/home.html',
+    controller: 'homeController'
+  }).
+  otherwise({
+    redirectTo: '/'
+  });
+}
 ])
 .config(['$locationProvider', function($locationProvider) {
   $locationProvider.html5Mode({enabled: true, requireBase: false}).hashPrefix('!');
@@ -18,23 +18,29 @@ libellus.config(['$routeProvider',
 .config(['$httpProvider', function($httpProvider) {
   $httpProvider.defaults.useXDomain = true;
   $httpProvider.defaults.headers['Content-Type'] = 'application/json';
-  // $cookiesProvider.$get()["globals"].currentUser.token;
-//   var cook = $cookieStore.get("globals");
-//   if (cook) {
-//     $http.defaults.headers.common['Authorization'] = 'JWT ' + cook.currentUser.token;
-//   }
 }])
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
-    .primaryPalette('blue')
-    .accentPalette('red')
+  .primaryPalette('blue')
+  .accentPalette('red')
 });
 libellus.run(function run( $http, $cookies){
-    var token = $cookies.getObject("globals");
-    console.log("COOKIES");
-    console.log(token);
-    if (token) {
-      $http.defaults.headers.common['Authorization'] = 'JWT ' + token;
-    }
-  // $http.defaults.headers.common["Authorization"] = $cookies["globals"].currentUser.token;
+  var token = $cookies.getObject("globals");
+  if (token) {
+    $http.defaults.headers.common['Authorization'] = 'JWT ' + token;
+  }
 });
+libellus.directive('ngConfirmClick', [
+  function(){
+    return {
+      link: function (scope, element, attr) {
+        var msg = attr.ngConfirmClick || "Are you sure?";
+        var clickAction = attr.confirmedClick;
+        element.bind('click',function (event) {
+          if ( window.confirm(msg) ) {
+            scope.$eval(clickAction)
+          }
+        });
+      }
+    };
+  }]);
