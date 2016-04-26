@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "dependencies": {
+    "angular-cookies": "~1.5.5"
+  },
   "scripts": {
     "test": "exit 0"
   },

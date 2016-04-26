@@ -13,8 +13,8 @@
     <md-dialog-content>
       <div class="md-dialog-content">
         <md-input-container class="md-block">
-          <label>Username:</label>
-          <input type="text" ng-model="account.username" required>
+          <label>Email:</label>
+          <input type="email" ng-model="account.email" required>
         </md-input-container>
 
         <md-input-container class="md-block">
@@ -28,8 +28,8 @@
         </md-input-container>
 
         <md-input-container ng-show="account.creating" class="md-block">
-          <label>Email:</label>
-          <input type="email" ng-model="account.email" ng-required="account.creating">
+          <label>Username:</label>
+          <input type="text" ng-model="account.username"  ng-required="account.creating">
         </md-input-container>
       </div>
     </md-dialog-content>

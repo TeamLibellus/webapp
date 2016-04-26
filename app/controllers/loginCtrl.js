@@ -1,7 +1,9 @@
-function loginController($scope, $mdDialog) {
+libellus.controller('loginController', ['$scope', '$mdDialog', 'AuthenticationService', function($scope, $mdDialog, AuthenticationService) {
 
   $scope.switchButtonMsg = "Create account";
   $scope.validationButtonMsg = "Login";
+
+  $scope.AuthenticationService = AuthenticationService;
 
   $scope.account = {
     creating: false,
@@ -17,8 +19,38 @@ function loginController($scope, $mdDialog) {
     $scope.validationButtonMsg = $scope.account.creating ? "Create account" : "Login";
    }
 
+   $scope.createAccount = function(){
+     console.log($scope.account);
+     if ($scope.account.password != $scope.account.confirm)
+     {
+       alert("Your passwords need to correspond.");
+       return;
+     }
+     AuthenticationService.Register($scope.account.username, $scope.account.email, $scope.account.password,
+       function(res){
+         console.log(res);
+       },
+       function(res){
+         console.log(res);
+       });
+   }
+
+   $scope.login = function(){
+     AuthenticationService.Login($scope.account.email, $scope.account.password,
+       function(res){
+         console.log(res);
+       },
+       function(res){
+         console.log(res);
+       });
+   }
+
    $scope.submitForm = function() {
      console.log($scope.account.creating);
+     if ($scope.account.creating)
+       $scope.createAccount();
+     else
+      $scope.login();
    }
 
   $scope.hide = function() {
@@ -33,4 +65,4 @@ function loginController($scope, $mdDialog) {
   $scope.answer = function(answer) {
     $mdDialog.hide(answer);
   };
-}
+}]);
