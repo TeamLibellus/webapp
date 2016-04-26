@@ -38,10 +38,10 @@ libellus.controller('loginController', ['$scope', '$mdDialog', 'AuthenticationSe
    $scope.login = function(){
      AuthenticationService.Login($scope.account.email, $scope.account.password,
        function(res){
-         console.log(res);
+         window.location.reload();
        },
        function(res){
-         console.log(res);
+         alert("Bad email/password!");
        });
    }
 

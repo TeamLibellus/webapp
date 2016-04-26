@@ -14,11 +14,11 @@
         <md-switch ng-model="searchmode" ng-change="switch()" aria-label="Switch search/profile">
         </md-switch>
 
-        <md-button class="md-icon-button" ng-show="!logged" aria-label="Login" ng-click="showLoginDialog($event)">
+        <md-button class="md-icon-button" ng-show="logged==false" aria-label="Login" ng-click="showLoginDialog($event)">
           <md-icon class="material-icons">perm_identity</md-icon>
         </md-button>
-        <md-button class="power_settings_new" ng-show="logged" aria-label="Logout" ng-click="logout()">
-          <md-icon class="material-icons">perm_identity</md-icon>
+        <md-button class="md-icon-button" ng-show="logged==true" aria-label="Logout" ng-click="logout()">
+          <md-icon class="material-icons">power_settings_new</md-icon>
         </md-button>
         <!-- <md-button class="md-icon-button" aria-label="Favorite">
 

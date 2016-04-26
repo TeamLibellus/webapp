@@ -1,4 +1,3 @@
-
 libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSidenav', '$log', '$mdMedia', 'ClassesService', 'webNotification', 'AuthenticationService',function($scope, $mdDialog, $http, $mdSidenav, $log, $mdMedia, ClassesService, webNotification, AuthenticationService) {
 
   $scope.baseURL = "http://libellus.corteks.org";
@@ -84,10 +83,9 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
   $scope.logged;
   $scope.AuthenticationService.isLog(function(res){
     $scope.logged = true;
-    console.log("Loggé !");
+    console.log($scope.logged);
   },
   function(res){
-    console.log("Non Loggé !");
     $scope.logged = false;
   })
 
@@ -433,6 +431,14 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
       $scope.customFullscreen = (wantsFullScreen === true);
     });
   };
+
+  $scope.logout = function(){
+    if (confirm("Do you really want to log out?"))
+      AuthenticationService.Logout();
+      window.location.reload();
+  }
+
+
 
   $scope.getTerms();
   $scope.resetCourses();
