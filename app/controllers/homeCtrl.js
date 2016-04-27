@@ -72,24 +72,23 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
   $scope.ClassesService = ClassesService;
   $scope.AuthenticationService = AuthenticationService;
 
-  $scope.logged;
-  $scope.schedulePublic = false;
   $scope.AuthenticationService.isLog(function(res){
-    $scope.logged = true;
-    console.log(res);
-    if (res.data.is_logged)
-      $scope.schedulePublic = true;
-    console.log($scope.logged);
+      console.log("USER");
+      console.log(res.data);
+      $scope.logged = true;
+      $scope.isSchedulePublic = res.data.is_public;
   },
   function(res){
     $scope.logged = false;
   })
 
-  $scope.isUnlocked = function()
+  $scope.setPublic = function(val)
   {
-    if ($scope.logged == true && $scope.schedulePublic == true)
-      return true;
-    return false;
+    $scope.AuthenticationService.setPublic(val, function(res){
+      $scope.isSchedulePublic = res.public;
+    }, function(){
+      console.log(res);
+    })
   }
 
   $scope.filterData = {

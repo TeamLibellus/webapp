@@ -29,6 +29,7 @@ libellus.controller('loginController', ['$scope', '$mdDialog', 'AuthenticationSe
      AuthenticationService.Register($scope.account.username, $scope.account.email, $scope.account.password,
        function(res){
          console.log(res);
+         window.location.reload();
        },
        function(res){
          console.log(res);

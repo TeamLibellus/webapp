@@ -14,12 +14,14 @@
         <md-switch ng-model="searchmode" ng-change="switch()" aria-label="Switch search/profile">
         </md-switch>
 
-        <md-button class="md-icon-button" ng-show="isUnlocked()==true" aria-label="Unlocked" ng-click="showLoginDialog($event)">
-          <md-icon class="material-icons">lock_open</md-icon>
-        </md-button>
-        <md-button class="md-icon-button" ng-show="isUnlocked()==false" aria-label="Locked" ng-click="showLoginDialog($event)">
-          <md-icon class="material-icons">lock_outline</md-icon>
-        </md-button>
+        <span ng-show="logged==true">
+          <md-button class="md-icon-button" ng-show="isSchedulePublic==true" aria-label="Unlocked" ng-click="setPublic(false)">
+            <md-icon class="material-icons">lock_open</md-icon>
+          </md-button>
+          <md-button class="md-icon-button" ng-show="isSchedulePublic==false" aria-label="Locked" ng-click="setPublic(true)">
+            <md-icon class="material-icons">lock_outline</md-icon>
+          </md-button>
+        </span>
 
         <md-button class="md-icon-button" ng-show="logged==false" aria-label="Login" ng-click="showLoginDialog($event)">
           <md-icon class="material-icons">perm_identity</md-icon>
