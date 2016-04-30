@@ -68,6 +68,9 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
   $scope.terms = [];
   $scope.subjects = [];
   $scope.classes = [];
+  $scope.userId;
+
+  $scope.baseUrl = 'http://libellus.michelantoine.ninja/';
 
   $scope.ClassesService = ClassesService;
   $scope.AuthenticationService = AuthenticationService;
@@ -77,6 +80,7 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
       console.log(res.data);
       $scope.logged = true;
       $scope.isSchedulePublic = res.data.is_public;
+      $scope.userId = res.data.id;
   },
   function(res){
     $scope.logged = false;
@@ -90,6 +94,21 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
       console.log(res);
     })
   }
+
+  $scope.showCalendar = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    // Modal dialogs should fully cover application
+    // to prevent interaction outside of dialog
+    $mdDialog.show(
+      $mdDialog.alert()
+        .parent(angular.element(document.querySelector('#popupContainer')))
+        .clickOutsideToClose(true)
+        .title('Here is the link to your calendar:')
+        .textContent()
+        .ok('OK')
+        .targetEvent(ev)
+    );
+  };
 
   $scope.filterData = {
     selectedTerm: 1,
@@ -115,7 +134,7 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
   $scope.getTerms = function() {
     $http({
       method: 'GET',
-      url: 'http://api.libell.us/terms'
+      url: $scope.baseUrl + 'terms'
     }).then(function successCallback(response) {
       $scope.terms = response.data;
       console.log($scope.terms);
@@ -127,7 +146,7 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
   $scope.getSubjects = function(term) {
     $http({
       method: 'GET',
-      url: 'http://api.libell.us/subjects'
+      url: $scope.baseUrl + 'subjects'
     }).then(function successCallback(response) {
       $scope.subjects = response.data;
       console.log($scope.subjects);
@@ -139,7 +158,7 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
   $scope.getClasses = function(subjectId) {
     $http({
       method: 'GET',
-      url: 'http://api.libell.us/subjects/' + subjectId + '/classes'
+      url: $scope.baseUrl + 'subjects/' + subjectId + '/classes'
     }).then(function successCallback(response) {
       $scope.resetCourses();
       $scope.classes = response.data;

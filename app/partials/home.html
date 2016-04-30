@@ -15,6 +15,10 @@
         </md-switch>
 
         <span ng-show="logged==true">
+          <md-button class="md-icon-button" ng-show="isSchedulePublic==true" aria-label="Calendar" ng-click="showCalendar($event)">
+            <md-icon class="material-icons">date_range</md-icon>
+          </md-button>
+
           <md-button class="md-icon-button" ng-show="isSchedulePublic==true" aria-label="Unlocked" ng-click="setPublic(false)">
             <md-icon class="material-icons">lock_open</md-icon>
           </md-button>
