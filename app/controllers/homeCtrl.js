@@ -239,7 +239,7 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
 
     $http({
       method: 'GET',
-      url: $scope.baseURL+'/users/me/classes'
+      url: $scope.baseUrl+'users/me/classes'
     }).then(function successCallback(response) {
       console.log(response);
       response.data.forEach(function(e, i, t) {
@@ -376,6 +376,8 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
       controller: function($scope, ClassesService) {
         $scope.c = c;
 
+        $scope.baseUrl = 'http://libellus.michelantoine.ninja/';
+
         $scope.removeCourse = function(c) {
           c.added = false;
           c.time.forEach(function(e, k, v) {
@@ -385,7 +387,7 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
               }
             });
           });
-          $http.post($scope.baseURL+'/users/me/removeClass', {
+          $http.post($scope.baseUrl + 'users/me/removeClass', {
             "classId" : c.id,
           });
 
@@ -397,7 +399,7 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
             c.added = true;
             ClassesService.mycourses[c.time[k].day][c.time[k].start.split(":")[0]].push(c);
           });
-          $http.post($scope.baseURL+'/users/me/addClass', {
+          $http.post($scope.baseUrl + 'users/me/addClass', {
             "classId" : c.id,
           });
         }
