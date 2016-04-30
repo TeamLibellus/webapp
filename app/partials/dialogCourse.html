@@ -6,18 +6,27 @@
       <div class="md-toolbar-tools">
         <h2>{{c.name}}</h2>
         <span flex></span>
+        <md-button class="md-icon-button" aria-label="More" ng-click="close()">
+          <md-icon class="material-icons">close</md-icon>
+        </md-button>
       </div>
     </md-toolbar>
     <md-dialog-content>
       <div class="md-dialog-content">
-        <p>{{c.section}}</p>
-        <p>{{c.description}}</p>
-        <p>{{c.room}} - {{c.teacher.name}} RATE : {{c.teacher.rate}}</p>
-        <a href="{{c.teacher.rateLink}}">RateMyProfessor</a>
-        <hr>
-        Capacity: {{c.capacity}}
-        Enrollment: {{c.enrollment}}
-        Seat left: {{c.capacity-c.enrollment}}
+        <div layout="row">
+          <div>
+            <p><strong>{{c.section}}</strong></p>
+            <p>{{c.description}}</p>
+            <p><strong>{{c.room}}</strong> - {{c.teacher.name}} <strong>{{c.teacher.rate}}</strong> on <a href="{{c.teacher.rateLink}}">RateMyProfessor</a></p>
+            <hr>
+            <i>Capacity:&nbsp&nbsp&nbsp&nbsp</i> {{c.capacity}}<br>
+            <i>Enrollment:&nbsp</i> {{c.enrollment}}<br>
+            <i>Seat left:&nbsp&nbsp&nbsp&nbsp&nbsp</i> {{c.capacity-c.enrollment}}
+          </div>
+          <div layout="column">
+            <div ng-repeat="u in c.users">{{u.username}} {{u.email}}</div>
+          </div>
+        </div>
       </div>
     </md-dialog-content>
     <md-dialog-actions layout="row" ng-hide="c.added">

@@ -14,7 +14,7 @@
 </head>
 
 <body class="layout-row" layout="row" layout-fill ng-cloak>
-
+<!-- <button class="show-button"></button> -->
   <md-content layout="column" flex>
     <ng-view></ng-view>
   </md-content>
@@ -31,6 +31,10 @@
   <!-- Node_Modules -->
   <script src="./node_modules/angular-cookies/angular-cookies.min.js"></script>
   <!-- App.js -->
+
+  <script src="./bower_components/HTML5-Desktop-Notifications2/desktop-notify.js"></script>
+  <script src="./bower_components/angular-web-notification/angular-web-notification.js"></script>
+  <script src="./app/date.js"></script>
   <script src="./app/app.js"></script>
   <script src="./app/controllers/homeCtrl.js"></script>
   <script src="./app/services/classesService.js"></script>

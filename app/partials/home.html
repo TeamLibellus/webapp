@@ -33,10 +33,14 @@
         <md-button class="md-icon-button" ng-show="logged==true" aria-label="Logout" ng-click="logout()">
           <md-icon class="material-icons">power_settings_new</md-icon>
         </md-button>
+        <!-- <md-button class="md-icon-button" aria-label="Favorite">
 
-        <md-button class="md-icon-button" aria-label="Favorite">
           <md-icon class="material-icons">search</md-icon>
-        </md-button>
+        </md-button> -->
+        <md-input-container >
+          <label style="color:white">Search</label>
+          <input ng-model="query" type="text" style="color:white" />
+        </md-input-container>
       </div>
     </md-toolbar>
     <md-content layout="row" layout-fill>
@@ -45,13 +49,13 @@
         <div ng-repeat="h in hours" class="day-row" layout="row">
           <p class="hours"><small>{{h.us}}</small></p>
 
-          <div ng-hide="searchmode" flex ng-repeat="c in courses[d.abr][h.eu.split(':')[0]] | filter:levelFilter | filter:seatsFilter"
+        <div ng-hide="searchmode" flex ng-repeat="c in courses[d.abr][h.eu.split(':')[0]] | filter:levelFilter | filter:seatsFilter | filter: search"
           class="courses-box md-primary"
           style="background-color:{{generateColor(c.id)}};height:{{c.height}}px;margin-top:{{c.top}}"
           ng-click="showAdvanced($event, c)">
           {{c.code}}
         </div>
-        <div ng-show="searchmode" flex ng-repeat="c in ClassesService.mycourses[d.abr][h.eu.split(':')[0]] | filter:levelFilter | filter:seatsFilter"
+        <div ng-show="searchmode" flex ng-repeat="c in ClassesService.mycourses[d.abr][h.eu.split(':')[0]] | filter:levelFilter | filter:seatsFilter | filter: search"
         class="courses-box md-primary"
         style="background-color:{{generateColor(c.id)}};height:{{c.height}}px;margin-top:{{c.top}}"
         ng-click="showAdvanced($event, c)">

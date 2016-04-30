@@ -1,5 +1,11 @@
-libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSidenav', '$log', '$mdMedia', 'ClassesService', 'AuthenticationService',
- function($scope, $mdDialog, $http, $mdSidenav, $log, $mdMedia, ClassesService, AuthenticationService) {
+libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSidenav', '$log', '$mdMedia', 'ClassesService', 'webNotification', 'AuthenticationService',function($scope, $mdDialog, $http, $mdSidenav, $log, $mdMedia, ClassesService, webNotification, AuthenticationService) {
+
+  $scope.search = function (row) {
+    return (angular.lowercase(row.name || "").indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+    angular.lowercase(row.section || "").indexOf(angular.lowercase($scope.query) || '') !== -1 ||
+    angular.lowercase(row.teacher.name || "").indexOf(angular.lowercase($scope.query) || '') !== -1);
+  };
+
 
   $scope.days = [{
     name: "Monday",
@@ -137,9 +143,7 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
       url: $scope.baseUrl + 'terms'
     }).then(function successCallback(response) {
       $scope.terms = response.data;
-      console.log($scope.terms);
     }, function errorCallback(response) {
-      console.log(response);
     });
   }
 
@@ -149,24 +153,113 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
       url: $scope.baseUrl + 'subjects'
     }).then(function successCallback(response) {
       $scope.subjects = response.data;
-      console.log($scope.subjects);
     }, function errorCallback(response) {
-      console.log(response);
     });
   }
+
+  $scope.notif = function (name, message, time) {
+    setTimeout(function () {
+      webNotification.showNotification(name, {
+        body: message,
+        icon: '../../bower_components/HTML5-Desktop-Notifications/alert.ico',
+        onClick: function onNotificationClicked() {
+          window.alert('Notification clicked.');
+        },
+        autoClose: 4000 //auto close the notification after 2 seconds (you manually close it via hide function)
+      }, function onShow(error, hide) {
+        if (error) {
+          window.alert('Unable to show notification: ' + error.message);
+        } else {
+          console.log('Notification Shown.');
+
+          setTimeout(function hideNotification() {
+            console.log('Hiding notification....');
+            hide(); //manually close the notification (or let the autoClose close it)
+          }, 5000);
+        }
+      })
+    }, time);
+
+  }
+
+  $scope.getNextWeekDay = function(day) {
+    // var d = new Date(Date.now());
+    var d = Date.now();
+    var diff = d.getDate() - d.getDay() + day;
+    console.log("DIFF");
+    console.log(diff);
+    console.log("getdate");
+    console.log(d.getDate());
+    console.log("getday");
+    console.log(d.getDay());
+    if (d.getDay() == 0)
+    diff -= 7;
+    diff += 7; // ugly hack to get next monday instead of current one
+    return new Date(d.setDate(diff));
+  };
+
+
+  $scope.timeBefore = function (day) {
+    var d = Date.now();
+    var t = $scope.getNextWeekDay(day) - d;
+    console.log(t);
+    return t.getTime();
+  }
+
+  // You can then use it like this :
+
+    // var date = new Date();
+    // alert(date.getNextWeekMonday());
+    // alert(date.getNextWeekFriday());
+
+    $scope.day = {
+      "Sun" : 0,
+      "Mon" : 1,
+      "Tue" : 2,
+      "Wed" : 3,
+      "Thu" : 4,
+      "Fri" : 5,
+      "Sat" : 6,
+    }
 
   $scope.getClasses = function(subjectId) {
     $http({
       method: 'GET',
       url: $scope.baseUrl + 'subjects/' + subjectId + '/classes'
     }).then(function successCallback(response) {
+      console.log("poney");
+
       $scope.resetCourses();
       $scope.classes = response.data;
-      console.log($scope.classes);
       $scope.sortClasses();
     }, function errorCallback(response) {
-      console.log(response);
+
     });
+
+
+    $http({
+      method: 'GET',
+      url: $scope.baseURL+'/users/me/classes'
+    }).then(function successCallback(response) {
+      console.log(response);
+      response.data.forEach(function(e, i, t) {
+        e.added = false;
+        e.time.forEach(function(ee, ii, tt) {
+          e.height = 60 * $scope.getDuration(ee.start, ee.end);
+          e.top = ee.start.split(":")[1];
+
+          var d = Date.parse("next " + ee.day);
+          d.set({hour : parseInt(ee.start.split(':')[0], 10), minute : parseInt(ee.start.split(':')[1], 10)});
+          var time = d.getTime() -  Date.now();
+          $scope.notif(e.name, e.name, time);
+
+          ClassesService.mycourses[ee.day][ee.start.split(":")[0]].push(e);
+        });
+      });
+    }, function errorCallback(response) {
+
+    });
+
   }
 
   $scope.timeToMargin = function() {
@@ -292,15 +385,25 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
               }
             });
           });
-
+          $http.post($scope.baseURL+'/users/me/removeClass', {
+            "classId" : c.id,
+          });
 
         }
 
         $scope.addCourse = function() {
+
           c.time.forEach(function(e, k, v) {
             c.added = true;
             ClassesService.mycourses[c.time[k].day][c.time[k].start.split(":")[0]].push(c);
           });
+          $http.post($scope.baseURL+'/users/me/addClass', {
+            "classId" : c.id,
+          });
+        }
+
+        $scope.close = function() {
+          $mdDialog.hide();
         }
 
       },
@@ -360,13 +463,6 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
     if (confirm("Do you really want to log out?"))
       AuthenticationService.Logout();
       window.location.reload();
-  }
-
-  $scope.getTerms();
-  $scope.resetCourses();
-  if ($scope.filterData.selectedTerm != 0) {
-    $scope.getSubjects($scope.filterData.selectedTerm);
-    $scope.updateClasses();
   }
 
   $scope.getTerms();
