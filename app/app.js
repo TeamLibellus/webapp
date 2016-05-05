@@ -8,13 +8,17 @@ function($routeProvider) {
     templateUrl: 'app/partials/home.html',
     controller: 'homeController'
   }).
+  when('/calendar/:id', {
+    templateUrl: 'app/partials/calendar.html',
+    controller: 'calendarController'
+  }).
   otherwise({
     redirectTo: '/'
   });
 }
 ])
 .config(['$locationProvider', function($locationProvider) {
-  $locationProvider.html5Mode({enabled: true, requireBase: false}).hashPrefix('!');
+  // $locationProvider.html5Mode({enabled: true, requireBase: false}).hashPrefix('!');
 }])
 .config(['$httpProvider', function($httpProvider) {
   $httpProvider.defaults.useXDomain = true;

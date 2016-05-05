@@ -110,7 +110,7 @@ libellus.controller('homeController', ['$scope', '$mdDialog', '$http', '$mdSiden
         .parent(angular.element(document.querySelector('#popupContainer')))
         .clickOutsideToClose(true)
         .title('Here is the link to your calendar:')
-        .textContent()
+        .textContent('http://webapp.dev/#/calendar/' + $scope.userId)
         .ok('OK')
         .targetEvent(ev)
     );

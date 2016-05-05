@@ -1,6 +1,4 @@
 <section layout="row" flex>
-  <div ng-include src="'app/partials/sidemenu.html'"></div>
-  <div ng-include src="'app/partials/dialogLoginCourse.html'"></div>
   <div flex>
     <md-toolbar>
       <div class="md-toolbar-tools">
@@ -35,30 +33,29 @@
         </md-button>
         <!-- <md-button class="md-icon-button" aria-label="Favorite">
 
-        <md-icon class="material-icons">search</md-icon>
-      </md-button> -->
-      <md-input-container >
-        <label style="color:white">Search</label>
-        <input ng-model="query" type="text" style="color:white" />
-      </md-input-container>
-    </div>
-  </md-toolbar>
+          <md-icon class="material-icons">search</md-icon>
+        </md-button> -->
+        <md-input-container >
+          <label style="color:white">Search</label>
+          <input ng-model="query" type="text" style="color:white" />
+        </md-input-container>
+      </div>
+    </md-toolbar>
   <md-content layout="row" layout-fill>
     <div flex ng-repeat="d in days" class="day-column" layout="column">
       <h3 class=".md-headline" style="text-align:center">{{d.name}}</h3>
       <div ng-repeat="h in hours" class="day-row" layout="row">
         <p class="hours"><small>{{h.us}}</small></p>
-
+        <!--
         <div ng-hide="searchmode" flex ng-repeat="c in courses[d.abr][h.eu.split(':')[0]] | filter:levelFilter | filter:seatsFilter | filter: search"
         class="courses-box md-primary"
         style="background-color:{{generateColor(c.id)}};height:{{c.height}}px;margin-top:{{c.top}}"
         ng-click="showAdvanced($event, c)">
         {{c.code}}
-      </div>
-      <div ng-show="searchmode" flex ng-repeat="c in ClassesService.mycourses[d.abr][h.eu.split(':')[0]] | filter:levelFilter | filter:seatsFilter | filter: search"
+      </div> -->
+      <div  flex ng-repeat="c in mycourses[d.abr][h.eu.split(':')[0]]"
       class="courses-box md-primary"
-      style="background-color:{{generateColor(c.id)}};height:{{c.height}}px;margin-top:{{c.top}}"
-      ng-click="showAdvanced($event, c)">
+      style="background-color:{{generateColor(c.id)}};height:{{c.height}}px;margin-top:{{c.top}}">
       {{c.code}}
     </div>
   </div>
